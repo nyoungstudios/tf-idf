@@ -40,6 +40,10 @@ def readIn(fileName):
             word = word.replace(':', '')
         if word.__contains__(';'):
             word = word.replace(';', '')
+        if word.__contains__('”'):
+            word = word.replace('”', '')
+        if word.__contains__('“'):
+            word = word.replace('“', '')
 
         word = word.lower()
 
@@ -89,9 +93,16 @@ docNumWithWord = calcTotalTimes(total)
 print(total)
 print(docNumWithWord)
 
-idfMap = {}
+idfMap = {}  #map of
 for j in docNumWithWord.keys():
     tempIDF = freq.inversedf(numOfDoc, docNumWithWord[j])
     idfMap[j] = tempIDF
 
 print(idfMap)
+
+databaseFile = open("database.txt", 'w')
+for term in idfMap.keys():
+    finalString = "" + term + ":" + str(idfMap[term]) + "\n"
+    databaseFile.write(finalString)
+
+databaseFile.close()
