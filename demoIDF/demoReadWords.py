@@ -80,13 +80,11 @@ def calcTotalTimes(total):
 
 #main program - it reads in all of the files, and then
 
-filepath = "~/"
-
-filelist = os.listdir(filepath)
+filelist = os.listdir("englishPaper")
 total = []  #a list of lists of [a map of the number of times a word appears in a document, the number of words in the document]
 
 for i in range(len(filelist)):
-     total.append(readIn(filepath + filelist[i]))
+     total.append(readIn("englishPaper/" + filelist[i]))
 
 numOfDoc = len(total)  #the number of documents
 docNumWithWord = calcTotalTimes(total)
