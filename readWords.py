@@ -1,4 +1,5 @@
 import os
+import frequency as freq
 #this is a program written by Nathaniel Young for tf-idf
 
 def readIn(fileName):
@@ -59,15 +60,15 @@ def readIn(fileName):
     return [keywordlist, numOfWords]
 
 def calcTotalTimes(total):
-    totalAppearance = total[0][0]  #holds the total number of times a word appears across all documents
-    for i in range(1,len(total)):
+    totalAppearance = {}  #holds the map of the number of documents that contain that word
+    for i in range(len(total)):
         tempMap = total[i][0]
 
         for word in tempMap.keys():  #iterates through all the keys in each list
             if totalAppearance.__contains__(word):
-                totalAppearance[word] +=tempMap[word]
+                totalAppearance[word] += 1
             else:
-                totalAppearance[word] = tempMap[word]
+                totalAppearance[word] = 1
 
     return totalAppearance
 
@@ -76,18 +77,21 @@ def calcTotalTimes(total):
 #main program - it reads in all of the files, and then
 
 filelist = os.listdir("englishPaper")
-total = []
+total = []  #a list of lists of [a map of the number of times a word appears in a document, the number of words in the document]
 
 for i in range(len(filelist)):
      total.append(readIn("englishPaper/" + filelist[i]))
 
+numOfDoc = len(total)  #the number of documents
+docNumWithWord = calcTotalTimes(total)
 
-#total.append(readIn("newfile.txt"))
-#print(total[0][1])
-print(calcTotalTimes(total))
-"""
-try:
-    print(total[1]['1'])
-except KeyError:
-    print("Out of bounds error")
-"""
+
+print(total)
+print(docNumWithWord)
+
+idfMap = {}
+for j in docNumWithWord.keys():
+    tempIDF = freq.inversedf(numOfDoc, docNumWithWord[j])
+    idfMap[j] = tempIDF
+
+print(idfMap)
