@@ -93,13 +93,14 @@ docNumWithWord = calcTotalTimes(total)
 print(total)
 print(docNumWithWord)
 
-idfMap = {}  #map of
+idfMap = {}  #map of the idf calculations
 for j in docNumWithWord.keys():
     tempIDF = freq.inversedf(numOfDoc, docNumWithWord[j])
     idfMap[j] = tempIDF
 
 print(idfMap)
 
+#writes the idf map to the database file
 databaseFile = open("database.txt", 'w')
 for term in idfMap.keys():
     finalString = "" + term + ":" + str(idfMap[term]) + "\n"
