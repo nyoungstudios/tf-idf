@@ -1,6 +1,19 @@
 import os
+import threading
 import frequency as freq
 #this is a program written by Nathaniel Young for tf-idf
+
+class myThread(threading.Thread):
+    def __init__(self, folderlist, begin, end):
+        threading.Thread.__init__(self)
+        self.folderlist = folderlist
+        self.begin = begin
+        self.end = end
+
+    def run(self):
+        iterateAndCreate(self.folderlist, self.begin, self.end)
+
+
 
 def readIn(articleString):
     s = articleString
@@ -43,7 +56,10 @@ def readIn(articleString):
             word = word.replace('”', '')
         if word.__contains__('“'):
             word = word.replace('“', '')
-
+        if word.__contains__('<'):
+            word = word.replace('<', '')
+        if word.__contains__('>'):
+            word = word.replace('>', '')
 
 
         word = word.lower()
@@ -77,12 +93,8 @@ def splitFile(filename):
         articleString = s[a+2:b]
         #print(articleString)
         total.append(readIn(articleString))
+
         index = b+1
-
-
-
-
-
 
 
 def calcTotalTimes(total):
@@ -98,39 +110,91 @@ def calcTotalTimes(total):
 
     return totalAppearance
 
+def iterateAndCreate(folderlist, begin, end):
+    for i in range(begin, end):
+
+        if not folderlist[i].startswith('.'):
+            filelist = os.listdir(filepath + folderlist[i])  # holds the list of files in each folder
+            print("This is the list of files in folder: " + folderlist[i])
+            print(filelist)
+            print("")
+
+            for j in range(len(filelist)):
+
+                if not filelist[j].startswith('.'):
+                    splitFile(filepath + folderlist[i] + "/" + filelist[j])
+                    # total.append(readIn(testpath + folderlist[i] + "/" + filelist[j]))
+
+
 
 
 #main program - it reads in all of the files, and then
 
 filepath = "../../../Documents/wikipedia/"
-testpath = "testFiles/"
+#testpath = "testFiles/"
 
-folderlist = os.listdir(testpath)  #holds the list of folders
+folderlist = os.listdir(filepath)  #holds the list of folders
 total = []  #a list of lists of [a map of the number of times a word appears in a document, the number of words in the document]
+
 print("This is the list of folders")
 print(folderlist)
 print("")
 
-for i in range(len(folderlist)):
+thread1 = myThread(folderlist, 0, 2)
+thread2 = myThread(folderlist, 2, 4)
+thread3 = myThread(folderlist, 4, 6)
+thread4 = myThread(folderlist, 6, 8)
+thread5 = myThread(folderlist, 8, 10)
+thread6 = myThread(folderlist, 10, 12)
+thread7 = myThread(folderlist, 12, 14)
+thread8 = myThread(folderlist, 14, 16)
+thread9 = myThread(folderlist, 16, 18)
+thread10 = myThread(folderlist, 18, 20)
+thread11 = myThread(folderlist, 20, 22)
+thread12 = myThread(folderlist, 22, 24)
+thread13 = myThread(folderlist, 24, 26)
 
-    if not folderlist[i].startswith('.'):
-        filelist = os.listdir(testpath + folderlist[i])  #holds the list of files in each folder
-        print("This is the list of files in folder: " + folderlist[i])
-        print(filelist)
-        print("")
+thread1.start()
+thread2.start()
+thread3.start()
+thread4.start()
+thread5.start()
+thread6.start()
+thread7.start()
+thread8.start()
+thread9.start()
+thread10.start()
+thread11.start()
+thread12.start()
+thread13.start()
 
-        for j in range(len(filelist)):
 
-            if not filelist[j].startswith('.'):
-                splitFile(testpath + folderlist[i] + "/" + filelist[j])
-                #total.append(readIn(testpath + folderlist[i] + "/" + filelist[j]))
+thread1.join()
+thread2.join()
+thread3.join()
+thread4.join()
+thread5.join()
+thread6.join()
+thread7.join()
+thread8.join()
+thread9.join()
+thread10.join()
+thread11.join()
+thread12.join()
+thread13.join()
+
+
+
+
+
 
 
 numOfDoc = len(total)  #the number of documents
 docNumWithWord = calcTotalTimes(total)
 
 
-print(len(total))
+#print(len(total))
+#print(total)
 #print(docNumWithWord)
 
 
@@ -144,7 +208,7 @@ try:
 except KeyError:
     print("Does not exist")
 
-#print(idfMap)
+print(idfMap)
 
 #writes the idf map to the database file
 databaseFile = open("database.txt", 'w')
@@ -153,4 +217,4 @@ for term in idfMap.keys():
     databaseFile.write(finalString)
 
 databaseFile.close()
-splitFile(testpath + "col1/wiki_00")
+
