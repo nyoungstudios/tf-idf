@@ -89,8 +89,10 @@ for i in range(len(filelist)):
 numOfDoc = len(total)  #the number of documents
 docNumWithWord = calcTotalTimes(total)
 
-
+print("Number of documents: " + str(len(total)))
+print("total")
 print(total)
+print("map the number of documents that contain a word")
 print(docNumWithWord)
 
 idfMap = {}  #map of the idf calculations
@@ -98,6 +100,7 @@ for j in docNumWithWord.keys():
     tempIDF = freq.inversedf(numOfDoc, docNumWithWord[j])
     idfMap[j] = tempIDF
 
+print("idf map")
 print(idfMap)
 
 #writes the idf map to the database file
