@@ -60,6 +60,16 @@ def readIn(articleString):
             word = word.replace('<', '')
         if word.__contains__('>'):
             word = word.replace('>', '')
+        if word.__contains__('|'):
+            word = word.replace('|', '')
+        if word.__contains__('='):
+            word = word.replace('=', '')
+        if word.__contains__('+'):
+            word = word.replace('+', '')
+        if word.__contains__('\\'):
+            word = word.replace('\\', '')
+        if word.__contains__('/'):
+            word = word.replace('/', '')
 
 
         word = word.lower()
@@ -140,19 +150,15 @@ print("This is the list of folders")
 print(folderlist)
 print("")
 
-thread1 = myThread(folderlist, 0, 2)
-thread2 = myThread(folderlist, 2, 4)
-thread3 = myThread(folderlist, 4, 6)
-thread4 = myThread(folderlist, 6, 8)
-thread5 = myThread(folderlist, 8, 10)
-thread6 = myThread(folderlist, 10, 12)
-thread7 = myThread(folderlist, 12, 14)
-thread8 = myThread(folderlist, 14, 16)
-thread9 = myThread(folderlist, 16, 18)
-thread10 = myThread(folderlist, 18, 20)
-thread11 = myThread(folderlist, 20, 22)
-thread12 = myThread(folderlist, 22, 24)
-thread13 = myThread(folderlist, 24, 26)
+thread1 = myThread(folderlist, 0, 15)
+thread2 = myThread(folderlist, 15, 30)
+thread3 = myThread(folderlist, 30, 45)
+thread4 = myThread(folderlist, 45, 60)
+thread5 = myThread(folderlist, 60, 75)
+thread6 = myThread(folderlist, 75, 90)
+thread7 = myThread(folderlist, 90, 105)
+thread8 = myThread(folderlist, 105, 120)
+thread9 = myThread(folderlist, 120, 135)
 
 thread1.start()
 thread2.start()
@@ -163,10 +169,6 @@ thread6.start()
 thread7.start()
 thread8.start()
 thread9.start()
-thread10.start()
-thread11.start()
-thread12.start()
-thread13.start()
 
 
 thread1.join()
@@ -178,11 +180,6 @@ thread6.join()
 thread7.join()
 thread8.join()
 thread9.join()
-thread10.join()
-thread11.join()
-thread12.join()
-thread13.join()
-
 
 
 

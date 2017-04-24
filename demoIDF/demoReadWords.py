@@ -44,6 +44,20 @@ def readIn(fileName):
             word = word.replace('”', '')
         if word.__contains__('“'):
             word = word.replace('“', '')
+        if word.__contains__('<'):
+            word = word.replace('<', '')
+        if word.__contains__('>'):
+            word = word.replace('>', '')
+        if word.__contains__('|'):
+            word = word.replace('|', '')
+        if word.__contains__('='):
+            word = word.replace('=', '')
+        if word.__contains__('+'):
+            word = word.replace('+', '')
+        if word.__contains__('\\'):
+            word = word.replace('\\', '')
+        if word.__contains__('/'):
+            word = word.replace('/', '')
 
         word = word.lower()
 
