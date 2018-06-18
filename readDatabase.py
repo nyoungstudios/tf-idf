@@ -2,7 +2,7 @@
 import frequency as freq
 from bs4 import BeautifulSoup
 import requests
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -113,7 +113,10 @@ def importantWords():
 
 
     #change this url to web scrape a different website - note that some websites will block requests to scrape their website as part of their EULA
-    url = "http://www.fullychargedshow.co.uk/electric-cars/coal-is-king"
+    #example url
+    # "http://www.fullychargedshow.co.uk/electric-cars/coal-is-king"
+    url = request.args.get('url')
+
 
 
     finalCalc = {}  #map that holds all of
