@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 from flask import Flask, request
 from flask_cors import CORS
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -178,8 +179,11 @@ def importantWords():
 
     outputFile.close()
 
+    print(finalCalc)
+
     print("success")
-    return "success"
+    #returns json of the calculations
+    return json.dumps(finalCalc)
 
 
 
