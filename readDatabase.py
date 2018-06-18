@@ -118,7 +118,7 @@ def importantWords():
     url = request.args.get('url')
 
     print(url)
-    
+
 
     finalCalc = {}  #map that holds all of
 
@@ -177,6 +177,9 @@ def importantWords():
         outputFile.write(finalString)
 
     outputFile.close()
+
+    print("success")
+    return "success"
 
 
 
