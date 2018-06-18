@@ -2,9 +2,13 @@
 import frequency as freq
 from bs4 import BeautifulSoup
 import requests
+from flask import Flask
+from flask_cors import CORS
 
-#change this url to web scrape a different website - note that some websites will block requests to scrape their website as part of their EULA
-url = "http://m.mlb.com/news/article/226145774/nationals-win-their-seventh-consecutive-game/?topicId=27118122"
+app = Flask(__name__)
+CORS(app)
+
+
 
 def readFile(fileName):
     #this function reads the database file into a map for the idf part
@@ -103,62 +107,76 @@ def readIn(articleString):
     #index 1: and the total number of words in the document
     return [keywordlist, numOfWords]
 
-
-#main program
-finalCalc = {}  #map that holds all of
-
-databaseIDFMap = readFile("database.txt")
-
-#web scraping part
-data = requests.get(url).text
-soup = BeautifulSoup(data, "html.parser")
-for elem in soup.find_all(['script', 'style', 'head', 'title']):
-    elem.extract()
-texts = soup.get_text()
-
-print(texts)
-filelist = readIn(texts)
-
-"""
-#for files
-file = open("textfile.txt", 'r')
-filestr = file.read()
-filelist = readIn(filestr)
-file.close()
-"""
-
-#removes '' blanks from the dictionary
-try:
-    filelist[1] -= filelist[0]['']
-    del filelist[0]['']
-except KeyError:
-    print("Does not exist")
-
-numOfWords = filelist[1]
-print(filelist)
+#main api call
+@app.route("/importantWords", methods=["GET"])
+def importantWords():
 
 
-#calculates the tf-idf and adds it to the dictionary finalCalc
-for i in filelist[0].keys():
-    #print(i)
+    #change this url to web scrape a different website - note that some websites will block requests to scrape their website as part of their EULA
+    url = "http://www.fullychargedshow.co.uk/electric-cars/coal-is-king"
+
+
+    finalCalc = {}  #map that holds all of
+
+    databaseIDFMap = readFile("database.txt")
+
+    #web scraping part
+    data = requests.get(url).text
+    soup = BeautifulSoup(data, "html.parser")
+    for elem in soup.find_all(['script', 'style', 'head', 'title']):
+        elem.extract()
+    texts = soup.get_text()
+
+    print(texts)
+    filelist = readIn(texts)
+
+    """
+    #for files
+    file = open("textfile.txt", 'r')
+    filestr = file.read()
+    filelist = readIn(filestr)
+    file.close()
+    """
+
+    #removes '' blanks from the dictionary
     try:
-        finalCalc[i] = freq.termFreq(filelist[0][i], numOfWords) * float(databaseIDFMap[i])
+        filelist[1] -= filelist[0]['']
+        del filelist[0]['']
     except KeyError:
-        finalCalc[i] = -1
+        print("Does not exist")
+
+    numOfWords = filelist[1]
+    print(filelist)
+
+
+    #calculates the tf-idf and adds it to the dictionary finalCalc
+    for i in filelist[0].keys():
+        #print(i)
+        try:
+            finalCalc[i] = freq.termFreq(filelist[0][i], numOfWords) * float(databaseIDFMap[i])
+        except KeyError:
+            finalCalc[i] = -1
 
 
 
-#prints all the dictionary keys and values to the output.txt file
-outputFile = open("output.txt", 'w')
+    #prints all the dictionary keys and values to the output.txt file
+    outputFile = open("output.txt", 'w')
 
-finalCalcOpp = {}
+    finalCalcOpp = {}
 
-for term in finalCalc.keys():
-    finalCalcOpp[finalCalc[term]] = term
+    for term in finalCalc.keys():
+        finalCalcOpp[finalCalc[term]] = term
 
-for value in sorted(finalCalc.values()):
-    finalString = "" + str(finalCalcOpp[value]) + ":" + str(value) + "\n"
-    print(finalString)
-    outputFile.write(finalString)
+    for value in sorted(finalCalc.values()):
+        finalString = "" + str(finalCalcOpp[value]) + ":" + str(value) + "\n"
+        print(finalString)
+        outputFile.write(finalString)
 
-outputFile.close()
+    outputFile.close()
+
+
+
+
+#main starts here
+if(__name__ == '__main__'):
+    app.run(debug=True)
