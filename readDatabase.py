@@ -117,7 +117,8 @@ def importantWords():
     # "http://www.fullychargedshow.co.uk/electric-cars/coal-is-king"
     url = request.args.get('url')
 
-
+    print(url)
+    
 
     finalCalc = {}  #map that holds all of
 
