@@ -120,7 +120,10 @@ def importantWords():
     print(url)
 
     #optional api field - top words with number parameter. If not parameter is passed, then it sends all of the words
-    top = int(request.args.get('top'))
+    top = request.args.get('top')
+    topValue = 0
+    if (top != None):
+        topValue = int(top)
 
 
 
@@ -171,7 +174,7 @@ def importantWords():
 
     #if statement if there is a top parameter passed
     if (top != None):
-        print(top)
+        print(topValue)
         print("test me over here")
 
         # prints all the dictionary keys and values to the output.txt file
@@ -183,7 +186,7 @@ def importantWords():
             finalCalcOpp[finalCalc[term]] = term
 
         for value in sorted(finalCalc.values(), reverse=True):
-            if counter == top:
+            if counter == topValue:
                 break
             finalString = "" + str(finalCalcOpp[value]) + ":" + str(value) + "\n"
             topCalc[finalCalcOpp[value]] = value
