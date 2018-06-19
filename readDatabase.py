@@ -113,15 +113,18 @@ def readIn(articleString):
 def importantWords():
 
 
-    #change this url to web scrape a different website - note that some websites will block requests to scrape their website as part of their EULA
+    #this is the url pulled from the api call - note that some websites will block requests to scrape their website as part of their EULA
     #example url
     # "http://www.fullychargedshow.co.uk/electric-cars/coal-is-king"
     url = request.args.get('url')
-
     print(url)
 
+    #optional api field - top words with number parameter. If not parameter is passed, then it sends all of the words
+    top = request.args.get('top')
 
-    finalCalc = {}  #map that holds all of
+
+
+    finalCalc = {}  #map that holds all of values for each word
 
     databaseIDFMap = readFile("database.txt")
 
@@ -162,26 +165,38 @@ def importantWords():
         except KeyError:
             finalCalc[i] = -1
 
+    #counter variable to match top
+    counter = 0
+    topCalc = {}
 
+    #if statement if there is a top parameter passed
+    if (top):
+        print(top)
 
-    #prints all the dictionary keys and values to the output.txt file
-    outputFile = open("output.txt", 'w')
+        # prints all the dictionary keys and values to the output.txt file
+        # outputFile = open("output.txt", 'w')
 
-    finalCalcOpp = {}
+        finalCalcOpp = {}
 
-    for term in finalCalc.keys():
-        finalCalcOpp[finalCalc[term]] = term
+        for term in finalCalc.keys():
+            finalCalcOpp[finalCalc[term]] = term
 
-    for value in sorted(finalCalc.values()):
-        finalString = "" + str(finalCalcOpp[value]) + ":" + str(value) + "\n"
-        print(finalString)
-        outputFile.write(finalString)
+        for value in sorted(finalCalc.values(), reverse=True):
+            if counter == top:
+                break
+            finalString = "" + str(finalCalcOpp[value]) + ":" + str(value) + "\n"
+            topCalc[finalCalcOpp[value]] = value
+            print(finalString)
+            counter = counter + 1
+            # outputFile.write(finalString)
+            # outputFile.close()
 
-    outputFile.close()
+        return topCalc
+    
+    print("All")
 
     print(finalCalc)
 
-    print("success")
     #returns json of the calculations
     return json.dumps(finalCalc)
 
