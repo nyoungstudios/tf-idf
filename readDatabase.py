@@ -196,17 +196,18 @@ def importantWords():
             # outputFile.close()
 
         print(topCalc)
-        return json.dumps(topCalc)
+        return json.dumps(sortDictionary(topCalc))
 
     print("Printing all the values")
 
     print(finalCalc)
 
     #returns json of the calculations
-    return json.dumps(finalCalc)
+    return json.dumps(sortDictionary(finalCalc))
 
 
-
+def sortDictionary(myDict):
+    return sorted(myDict.items(), key=lambda x : x[1], reverse=True)
 
 #main starts here
 if(__name__ == '__main__'):
